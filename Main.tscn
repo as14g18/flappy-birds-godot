@@ -1,0 +1,75 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Main.gd" type="Script" id=1]
+[ext_resource path="res://Pipe.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Bird.tscn" type="PackedScene" id=3]
+[ext_resource path="res://art/background-day.png" type="Texture" id=4]
+[ext_resource path="res://HUD.tscn" type="PackedScene" id=5]
+
+[sub_resource type="Curve2D" id=1]
+
+bake_interval = 5.0
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 472.293, 439.745, 0, 0, 0, 0, 469.278, 171.439 )
+}
+
+[node name="Main" type="Node" index="0"]
+
+script = ExtResource( 1 )
+Pipe = ExtResource( 2 )
+
+[node name="Bird" parent="." index="0" instance=ExtResource( 3 )]
+
+[node name="PipeTimer" type="Timer" parent="." index="1"]
+
+process_mode = 1
+wait_time = 2.0
+one_shot = false
+autostart = false
+
+[node name="ScoreTimer" type="Timer" parent="." index="2"]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = false
+autostart = false
+
+[node name="StartPosition" type="Position2D" parent="." index="3"]
+
+position = Vector2( 59.8615, 60.9418 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Sprite" type="Sprite" parent="." index="4"]
+
+position = Vector2( 237.742, 302.935 )
+scale = Vector2( 1.66435, 1.16443 )
+z_index = -10
+texture = ExtResource( 4 )
+_sections_unfolded = [ "Z Index" ]
+
+[node name="PipePath" type="Path2D" parent="." index="5"]
+
+self_modulate = Color( 0.5, 0.6, 1, 0.7 )
+curve = SubResource( 1 )
+
+[node name="PipeSpawnLocation" type="PathFollow2D" parent="PipePath" index="0"]
+
+position = Vector2( 472.293, 439.745 )
+rotation = -1.58205
+offset = 0.0
+h_offset = 0.0
+v_offset = 0.0
+rotate = true
+cubic_interp = true
+loop = true
+lookahead = 4.0
+
+[node name="HUD" parent="." index="6" instance=ExtResource( 5 )]
+
+[connection signal="hit" from="Bird" to="." method="_on_Bird_hit"]
+
+[connection signal="timeout" from="PipeTimer" to="." method="_on_PipeTimer_timeout"]
+
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_ScoreTimer_timeout"]
+
+
